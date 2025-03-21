@@ -1,120 +1,800 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      
-    </head>
-    <body>
-       
-
-
-        <!-- Main Content-->
-        <div class="container px-4 px-lg-5">
-
-           <!DOCTYPE html>
-<html>
-
-<body class="form-v9">
-	<div class="page-content">
-		<div class="form-v9-content" style="background-image: url('static/assets/img/form-v9.jpg')">
-			<form class="form-detail" action="/predict" method="post">
-				<h2>Please Fill The Information</h2>
-				<div class="form-row-total">
-
-					<div class="form-row">
-                        <label for="fixed_acidity"> Fixed Acidity:</label>
-						<input type="text" name="fixed_acidity" id="fixed_acidity" class="input-text" placeholder="fixed_acidity" required>
-					</div>
-
-					<div class="form-row">
-                        <label for="volatile_acidity"> Volatile Acidity:</label>
-						<input type="text" name="volatile_acidity" id="volatile_acidity" class="input-text" placeholder="volatile_acidity" required>
-					</div>
-
-				</div>
-
-
-				<div class="form-row-total">
-
-                    <div class="form-row">
-                        <label for="citric_acid"> Citric Acid:</label>
-						<input type="text" name="citric_acid" id="citric_acid" class="input-text" placeholder="citric_acid" required>
-					</div>
-
-
-                    <div class="form-row">
-                        <label for="residual_sugar"> Residual Sugar:</label>
-						<input type="text" name="residual_sugar" id="residual_sugar" class="input-text" placeholder="residual_sugar" required>
-					</div>
-
-				</div>
-
-
-                <div class="form-row-total">
-
-                    <div class="form-row">
-                        <label for="chlorides"> Chlorides:</label>
-						<input type="text" name="chlorides" id="chlorides" class="input-text" placeholder="chlorides" required>
-					</div>
-
-                    <div class="form-row">
-                        <label for="free_sulfur_dioxide"> Free Sulfur Dioxide:</label>
-						<input type="text" name="free_sulfur_dioxide" id="free_sulfur_dioxide" class="input-text" placeholder="free_sulfur_dioxide" required>
-					</div>
-
-				</div>
-
-
-                <div class="form-row-total">
-
-                    <div class="form-row">
-                        <label for="total_sulfur_dioxide"> Total Sulfur Dioxide:</label>
-						<input type="text" name="total_sulfur_dioxide" id="total_sulfur_dioxide" class="input-text" placeholder="total_sulfur_dioxide" required>
-					</div>
-
-                    <div class="form-row">
-                        <label for="density"> Density:</label>
-						<input type="text" name="density" id="density" class="input-text" placeholder="density" required>
-					</div>
-
-				</div>
-
-
-                <div class="form-row-total">
-
-                    <div class="form-row">
-                        <label for="pH"> pH:</label>
-						<input type="text" name="pH" id="pH" class="input-text" placeholder="pH" required>
-					</div>
-
-                    <div class="form-row">
-                        <label for="sulphates"> Sulphates:</label>
-						<input type="text" name="sulphates" id="sulphates" class="input-text" placeholder="sulphates" required>
-					</div>
-
-				</div>
-
-
-                <div class="form-row-total">
-
-                    <div class="form-row">
-                        <label for="alcohol"> Alcohol:</label>
-						<input type="text" name="alcohol" id="alcohol" class="input-text" placeholder="alcohol" required>
-					</div>
-
-
-				</div>
-
-
-				<div class="form-row-last">
-					<input type="submit" name="register" class="register" value="Predict">
-				</div>
-			</form>
-		</div>
-	</div>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-</html>
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Quality Predictor</title>
+    <style>
+        :root {
+            --primary-color: #722F37;
+            --secondary-color: #A4243B;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
         
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .form-container {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('/api/placeholder/1200/800') center/cover no-repeat;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wine-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+        
+        .wine-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .wine-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .form-row-flex {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        
+        .form-group {
+            flex: 1 0 calc(50% - 30px);
+            margin: 0 15px 20px;
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .form-group {
+                flex: 1 0 calc(100% - 30px);
+            }
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.2);
+            outline: none;
+        }
+        
+        .range-container {
+            position: relative;
+            padding-bottom: 30px;
+        }
+        
+        .range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .range-value {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-weight: bold;
+        }
+        
+        .range-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #666;
+            padding-top: 5px;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-reset {
+            background-color: #6c757d;
+        }
+        
+        .btn-reset:hover {
+            background-color: #5a6268;
+        }
+        
+        .presets-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .preset-btn {
+            padding: 8px 16px;
+            margin: 0 5px 10px;
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .preset-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: #666;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .result-container {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            display: none;
+        }
+        
+        .result-container.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .quality-meter {
+            margin: 20px auto;
+            width: 80%;
+            height: 30px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .quality-fill {
+            height: 100%;
+            background: linear-gradient(to right, #dc3545, #ffc107, #28a745);
+            width: 0%;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+        
+        .quality-marker {
+            position: absolute;
+            top: -20px;
+            width: 2px;
+            height: 70px;
+            background-color: black;
+            transform: translateX(-50%);
+        }
+        
+        .quality-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .parameter-info {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .parameter-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .parameter-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .parameter-table th, .parameter-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .parameter-table th {
+            background-color: #f8f9fa;
+        }
+        
+        .validation-error {
+            color: var(--error-color);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        input.error {
+            border-color: var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="wine-header">
+                <h1>Wine Quality Predictor</h1>
+                <p>Enter the chemical properties of your wine to predict its quality score</p>
+            </div>
+            
+            <div class="presets-container">
+                <h3>Quick Presets</h3>
+                <button class="preset-btn" data-preset="red-high">High Quality Red</button>
+                <button class="preset-btn" data-preset="red-medium">Medium Quality Red</button>
+                <button class="preset-btn" data-preset="red-low">Low Quality Red</button>
+                <button class="preset-btn" data-preset="white-high">High Quality White</button>
+            </div>
+            
+            <form id="wine-form" action="/predict" method="post">
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label for="fixed_acidity">
+                            Fixed Acidity
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">Most acids involved with wine or fixed or nonvolatile (do not evaporate readily). Typically between 4.6-15.9 g/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="fixed_acidity" name="fixed_acidity" min="4" max="16" step="0.1" value="7.0" class="range-slider">
+                            <span class="range-value">7.0</span>
+                            <div class="range-info">
+                                <span>4.0</span>
+                                <span>16.0</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="fixed_acidity_error">Please enter a valid value</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="volatile_acidity">
+                            Volatile Acidity
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">The amount of acetic acid in wine, which at too high of levels can lead to an unpleasant, vinegar taste. Typically between 0.12-1.58 g/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="volatile_acidity" name="volatile_acidity" min="0.1" max="1.6" step="0.01" value="0.4" class="range-slider">
+                            <span class="range-value">0.4</span>
+                            <div class="range-info">
+                                <span>0.1</span>
+                                <span>1.6</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="volatile_acidity_error">Please enter a valid value</div>
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label for="citric_acid">
+                            Citric Acid
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">Found in small quantities, citric acid can add 'freshness' and flavor to wines. Typically between 0-1 g/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="citric_acid" name="citric_acid" min="0" max="1" step="0.01" value="0.3" class="range-slider">
+                            <span class="range-value">0.3</span>
+                            <div class="range-info">
+                                <span>0.0</span>
+                                <span>1.0</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="citric_acid_error">Please enter a valid value</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="residual_sugar">
+                            Residual Sugar
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">The amount of sugar remaining after fermentation stops. Typically between 0.9-15.5 g/L for red wines.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="residual_sugar" name="residual_sugar" min="0.9" max="15.5" step="0.1" value="2.5" class="range-slider">
+                            <span class="range-value">2.5</span>
+                            <div class="range-info">
+                                <span>0.9</span>
+                                <span>15.5</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="residual_sugar_error">Please enter a valid value</div>
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label for="chlorides">
+                            Chlorides
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">The amount of salt in the wine. Typically between 0.012-0.611 g/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="chlorides" name="chlorides" min="0.01" max="0.61" step="0.01" value="0.08" class="range-slider">
+                            <span class="range-value">0.08</span>
+                            <div class="range-info">
+                                <span>0.01</span>
+                                <span>0.61</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="chlorides_error">Please enter a valid value</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="free_sulfur_dioxide">
+                            Free Sulfur Dioxide
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">The free form of SO2 exists in equilibrium between molecular SO2 and bisulfite ion. Typically between 1-72 mg/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="free_sulfur_dioxide" name="free_sulfur_dioxide" min="1" max="72" step="1" value="15" class="range-slider">
+                            <span class="range-value">15</span>
+                            <div class="range-info">
+                                <span>1</span>
+                                <span>72</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="free_sulfur_dioxide_error">Please enter a valid value</div>
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label for="total_sulfur_dioxide">
+                            Total Sulfur Dioxide
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">Amount of free and bound forms of S02. In low concentrations, SO2 is mostly undetectable, but at free SO2 concentrations over 50 ppm, SO2 becomes evident in the nose and taste. Typically between 6-289 mg/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="total_sulfur_dioxide" name="total_sulfur_dioxide" min="6" max="289" step="1" value="45" class="range-slider">
+                            <span class="range-value">45</span>
+                            <div class="range-info">
+                                <span>6</span>
+                                <span>289</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="total_sulfur_dioxide_error">Please enter a valid value</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="density">
+                            Density
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">The density of wine is close to that of water depending on the percent alcohol and sugar content. Typically between 0.99-1.04 g/cm³.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="density" name="density" min="0.99" max="1.04" step="0.001" value="0.997" class="range-slider">
+                            <span class="range-value">0.997</span>
+                            <div class="range-info">
+                                <span>0.99</span>
+                                <span>1.04</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="density_error">Please enter a valid value</div>
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label for="pH">
+                            pH
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">Describes how acidic or basic a wine is on a scale from 0 (very acidic) to 14 (very basic). Most wines are between 3-4 on the pH scale.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="pH" name="pH" min="2.8" max="4.0" step="0.01" value="3.2" class="range-slider">
+                            <span class="range-value">3.2</span>
+                            <div class="range-info">
+                                <span>2.8</span>
+                                <span>4.0</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="pH_error">Please enter a valid value</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sulphates">
+                            Sulphates
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">A wine additive which can contribute to sulfur dioxide gas (S02) levels, which acts as an antimicrobial and antioxidant. Typically between 0.33-2 g/L.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="sulphates" name="sulphates" min="0.3" max="2.0" step="0.01" value="0.65" class="range-slider">
+                            <span class="range-value">0.65</span>
+                            <div class="range-info">
+                                <span>0.3</span>
+                                <span>2.0</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="sulphates_error">Please enter a valid value</div>
+                    </div>
+                </div>
+                
+                <div class="form-row-flex">
+                    <div class="form-group">
+                        <label for="alcohol">
+                            Alcohol
+                            <span class="tooltip">ⓘ
+                                <span class="tooltiptext">The percent alcohol content of the wine. Typically between 8.4-14.9%.</span>
+                            </span>
+                        </label>
+                        <div class="range-container">
+                            <input type="range" id="alcohol" name="alcohol" min="8.4" max="14.9" step="0.1" value="10.5" class="range-slider">
+                            <span class="range-value">10.5</span>
+                            <div class="range-info">
+                                <span>8.4</span>
+                                <span>14.9</span>
+                            </div>
+                        </div>
+                        <div class="validation-error" id="alcohol_error">Please enter a valid value</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wine_type">Wine Type</label>
+                        <select id="wine_type" name="wine_type" class="form-control">
+                            <option value="red">Red Wine</option>
+                            <option value="white">White Wine</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="btn-container">
+                    <button type="button" id="reset-btn" class="btn btn-reset">Reset Form</button>
+                    <button type="button" id="predict-btn" class="btn">Predict Quality</button>
+                    <button type="submit" class="btn">Submit to Server</button>
+                </div>
+            </form>
+            
+            <div id="result-container" class="result-container">
+                <h2>Prediction Result</h2>
+                <div class="quality-meter">
+                    <div id="quality-fill" class="quality-fill"></div>
+                </div>
+                <div id="quality-label" class="quality-label"></div>
+                <p id="quality-description"></p>
+            </div>
+            
+            <div class="parameter-info">
+                <h3>Parameter Reference Guide</h3>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Range</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fixed Acidity</td>
+                            <td>4.6 - 15.9 g/L</td>
+                            <td>Most acids involved with wine that do not evaporate readily</td>
+                        </tr>
+                        <tr>
+                            <td>Volatile Acidity</td>
+                            <td>0.12 - 1.58 g/L</td>
+                            <td>The amount of acetic acid in wine (too high leads to vinegar taste)</td>
+                        </tr>
+                        <tr>
+                            <td>Citric Acid</td>
+                            <td>0 - 1 g/L</td>
+                            <td>Found in small quantities, adds freshness and flavor</td>
+                        </tr>
+                        <tr>
+                            <td>Residual Sugar</td>
+                            <td>0.9 - 15.5 g/L</td>
+                            <td>Amount of sugar remaining after fermentation stops</td>
+                        </tr>
+                        <tr>
+                            <td>Chlorides</td>
+                            <td>0.012 - 0.611 g/L</td>
+                            <td>Amount of salt in the wine</td>
+                        </tr>
+                        <tr>
+                            <td>Free Sulfur Dioxide</td>
+                            <td>1 - 72 mg/L</td>
+                            <td>Prevents microbial growth and oxidation</td>
+                        </tr>
+                        <tr>
+                            <td>Total Sulfur Dioxide</td>
+                            <td>6 - 289 mg/L</td>
+                            <td>Amount of free and bound forms of S02</td>
+                        </tr>
+                        <tr>
+                            <td>Density</td>
+                            <td>0.99 - 1.04 g/cm³</td>
+                            <td>Density of wine (close to that of water)</td>
+                        </tr>
+                        <tr>
+                            <td>pH</td>
+                            <td>2.74 - 4.01</td>
+                            <td>Describes how acidic or basic a wine is</td>
+                        </tr>
+                        <tr>
+                            <td>Sulphates</td>
+                            <td>0.33 - 2 g/L</td>
+                            <td>Wine additive that contributes to SO2 levels</td>
+                        </tr>
+                        <tr>
+                            <td>Alcohol</td>
+                            <td>8.4 - 14.9%</td>
+                            <td>Percent alcohol content of the wine</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-
-       
+    <script>
+        // Initialize all range sliders
+        document.querySelectorAll('.range-slider').forEach(slider => {
+            const valueDisplay = slider.parentElement.querySelector('.range-value');
+            
+            // Set initial value
+            valueDisplay.textContent = parseFloat(slider.value).toFixed(slider.step.includes('.') ? slider.step.split('.')[1].length : 0);
+            
+            // Update value display when slider changes
+            slider.addEventListener('input', function() {
+                const decimalPlaces = slider.step.includes('.') ? slider.step.split('.')[1].length : 0;
+                valueDisplay.textContent = parseFloat(this.value).toFixed(decimalPlaces);
+            });
+        });
+        
+        // Reset form
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            document.getElementById('wine-form').reset();
+            
+            // Reset all sliders to default values
+            document.querySelectorAll('.range-slider').forEach(slider => {
+                const defaultValue = slider.getAttribute('value');
+                slider.value = defaultValue;
+                
+                const valueDisplay = slider.parentElement.querySelector('.range-value');
+                const decimalPlaces = slider.step.includes('.') ? slider.step.split('.')[1].length : 0;
+                valueDisplay.textContent = parseFloat(defaultValue).toFixed(decimalPlaces);
+            });
+            
+            // Hide result container
+            document.getElementById('result-container').classList.remove('show');
+        });
+        
+        // Presets for different wine types and qualities
+        const presets = {
+            'red-high': {
+                fixed_acidity: 8.0,
+                volatile_acidity: 0.28,
+                citric_acid: 0.4,
+                residual_sugar: 2.2,
+                chlorides: 0.07,
+                free_sulfur_dioxide: 15,
+                total_sulfur_dioxide: 30,
+                density: 0.995,
+                pH: 3.3,
+                sulphates: 0.8,
+                alcohol: 12.5,
+                wine_type: 'red'
+            },
+            'red-medium': {
+                fixed_acidity: 7.5,
+                volatile_acidity: 0.5,
+                citric_acid: 0.25,
+                residual_sugar: 2.0,
+                chlorides: 0.08,
+                free_sulfur_dioxide: 12,
+                total_sulfur_dioxide: 35,
+                density: 0.998,
+                pH: 3.4,
+                sulphates: 0.65,
+                alcohol: 10.0,
+                wine_type: 'red'
+            },
+            'red-low': {
+                fixed_acidity: 7.0,
+                volatile_acidity: 0.8,
+                citric_acid: 0.15,
+                residual_sugar: 1.8,
+                chlorides: 0.1,
+                free_sulfur_dioxide: 10,
+                total_sulfur_dioxide: 40,
+                density: 1.000,
+                pH: 3.5,
+                sulphates: 0.5,
+                alcohol: 9.0,
+                wine_type: 'red'
+            },
+            'white-high': {
+                fixed_acidity: 7.0,
+                volatile_acidity: 0.25,
+                citric_acid: 0.35,
+                residual_sugar: 6.0,
+                chlorides: 0.04,
+                free_sulfur_dioxide: 35,
+                total_sulfur_dioxide: 120,
+                density: 0.992,
+                pH: 3.1,
+                sulphates: 0.5,
+                alcohol: 12.0,
+                wine_type: 'white'
+            }
+        };
+        
+        // Apply preset when preset button is clicked
+        document.querySelectorAll('.preset-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const presetName = this.getAttribute('data-preset');
+                const preset = presets[presetName];
+                
+                if (preset) {
+                    // Apply values to form
+                    for (const [key, value] of Object.entries(preset)) {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            element.value = value;
+                            
+                            // Update range slider display
+                            if (element.classList.contains('range-slider')) {
+                                const valueDisplay = element.parentElement.querySelector('.range-value');
+                                const decimalPlaces = element.step.includes('.') ? element.step.split('.')[1].length : 0;
+                                valueDisplay.textContent = parseFloat(value).toFixed(decimalPlaces);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Simple client-side prediction model (for demonstration purposes)
+        // In a real application, this would call the server endpoint
+        document.getElementById('predict-btn').addEventListener('click', function() {
+            // Get form values
+            const formData = {
+                                fixed_acidity: parseFloat(document.getElementById('fixed_acidity').value),
+                                volatile_acidity: parseFloat(document.getElementById('volatile_acidity').value),
+                                citric_acid: parseFloat(document.getElementById('citric_acid').value),
+                                residual_sugar: parseFloat(document.getElementById('residual_sugar').value),
+                                chlorides: parseFloat(document.getElementById('chlorides').value),
+                                free_sulfur_dioxide: parseFloat(document.getElementById('free_sulfur_dioxide').value),
+                                total_sulfur_dioxide: parseFloat(document.getElementById('total_sulfur_dioxide').value),
+                                density: parseFloat(document.getElementById('density').value),
+                                pH: parseFloat(document.getElementById('pH').value),
+                                sulphates: parseFloat(document.getElementById('sulphates').value),
+                                alcohol: parseFloat(document.getElementById('alcohol').value),
+                                wine_type: document.getElementById('wine_type').value
+                            };
+                
+                            // Simple prediction logic (for demonstration purposes)
+                            const quality = (formData.fixed_acidity + formData.volatile_acidity + formData.citric_acid + formData.residual_sugar + formData.chlorides + formData.free_sulfur_dioxide + formData.total_sulfur_dioxide + formData.density + formData.pH + formData.sulphates + formData.alcohol) / 11;
+                            const qualityPercentage = Math.min(Math.max((quality - 3) / 7 * 100, 0), 100);
+                
+                            // Update quality meter
+                            const qualityFill = document.getElementById('quality-fill');
+                            qualityFill.style.width = qualityPercentage + '%';
+                
+                            // Update quality label
+                            const qualityLabel = document.getElementById('quality-label');
+                            qualityLabel.textContent = 'Quality: ' + quality.toFixed(2);
+                
+                            // Update quality description
+                            const qualityDescription = document.getElementById('quality-description');
+                            qualityDescription.textContent = 'This is a simple prediction based on the average of the input parameters.';
+                
+                            // Show result container
+                            document.getElementById('result-container').classList.add('show');
+                        });
+                    </script>
+                </body>
+                </html>
